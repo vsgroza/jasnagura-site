@@ -29,16 +29,37 @@ class GalleryImage(models.Model):
 
 
 # Модель для общих настроек сайта (фон, заголовки)
+from django.db import models
+
+
+# Остальные модели (Event, GalleryImage и т.д.) оставь как есть,
+# замени ТОЛЬКО класс SiteSettings на этот:
+
 class SiteSettings(models.Model):
-    hero_image = models.ImageField("Фон главной шапки", upload_to='site_settings/',
-                                   help_text="Загрузите фото высокого качества (1920x1080)")
+    # Фон шапки
+    hero_image = models.ImageField(
+        "Фон главной шапки",
+        upload_to='site_settings/',
+        help_text="Загрузите фото высокого качества (1920x1080)"
+    )
+
+    # НОВОЕ ПОЛЕ: Фото для блока "О нас"
+    about_image = models.ImageField(
+        "Фото в блоке 'О нас'",
+        upload_to='site_settings/',
+        blank=True,
+        null=True,
+        help_text="Фото рядом с текстом 'История и Миссия'"
+    )
 
     class Meta:
-        verbose_name = "Настройки шапки"
-        verbose_name_plural = "Настройки шапки"
+        verbose_name = "Настройки сайта"
+        verbose_name_plural = "Настройки сайта"
 
     def __str__(self):
-        return "Настройки главной страницы"
+        return "Общие настройки (Фон, О нас)"
+
+
 
 # Модель для сообщений с сайта
 class ContactMessage(models.Model):

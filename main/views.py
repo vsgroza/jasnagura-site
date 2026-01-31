@@ -30,7 +30,7 @@ def ask_ai(request):
 
             # === КЛЮЧ ===
             # Вставь свой ключ AIza... (если он там уже есть - не трогай)
-            api_key = os.environ.get("GEMINI_API_KEY", "ТВОЙ_КЛЮЧ_AIza...")
+            api_key = os.environ.get("GEMINI_API_KEY", "AIzaSyAwz02DmeSWnUfPrftMb882AtWQ6tkjGhk")
 
             genai.configure(api_key=api_key)
 
