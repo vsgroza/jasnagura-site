@@ -1,0 +1,811 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Towarzystwo Kultury Polskiej "Jasna Góra" - Тирасполь</title>
+    <meta name="description" content="Официальный сайт общества польской культуры Ясна Гура в Тирасполе.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'polish-red': '#DC143C',
+                        'polish-white': '#FFFFFF',
+                        'dark-gray': '#2D2D2D',
+                    },
+                    fontFamily: {
+                        'sans': ['Montserrat', 'sans-serif'],
+                        'serif': ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+       .hero-bg {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* Стандартная картинка (на случай, если в админке пусто) */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1563804803975-299f18b5b597?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+        }
+
+        /* Если администратор загрузил фото, используем его */
+        {% if settings and settings.hero_image %}
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ settings.hero_image.url }}');
+        }
+        {% endif %}
+        .smooth-scroll { scroll-behavior: smooth; }
+        @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .animate-pulse-slow { animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
+
+        .break-words-overflow { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
+        /* Паттерн "Польская точка" для фона */
+        .bg-polish-pattern {
+            background-color: #f9fafb; /* Светло-серый фон */
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 20px 20px; /* Расстояние между точками */
+        }
+
+        /* Декоративная лента (Флаг) */
+        .polish-divider {
+            height: 6px;
+            width: 100%;
+            background: repeating-linear-gradient(
+                -45deg,
+                #DC143C,
+                #DC143C 10px,
+                #ffffff 10px,
+                #ffffff 20px
+            );
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* Класс для "скролленного" состояния меню */
+        .nav-scrolled {
+            background-color: white !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Цвета текста в меню меняем через JS, или классы ниже */
+        .nav-scrolled .nav-link { color: #4b5563 !important; } /* Серый текст */
+        .nav-scrolled .nav-link:hover { color: #DC143C !important; } /* Красный при наведении */
+
+        .nav-transparent .nav-link { color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .nav-transparent .nav-link:hover { color: #fca5a5 !important; } /* Светло-красный */
+
+        /* Логотип-текст тоже должен менять цвет */
+        .nav-scrolled .logo-text-main { color: #111827 !important; }
+        .nav-transparent .logo-text-main { color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 smooth-scroll">
+
+    <!-- Навигация -->
+    <nav class="fixed w-full z-50 transition-all duration-500 nav-transparent py-2" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex justify-between items-center h-20">
+
+                <div class="flex items-center z-20 space-x-4">
+                    <a href="#" class="block flex-shrink-0 hover:opacity-90 transition">
+                        <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-white/50 shadow-lg bg-white relative">
+                            <img src="{% static 'img/logo.jpg' %}" alt="Логотип" class="w-full h-full object-cover relative z-10"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="absolute inset-0 hidden items-center justify-center text-polish-red z-0 bg-gray-50">
+                                <i class="fas fa-image text-xl opacity-40"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="flex flex-col justify-center">
+                        <a href="#" class="block group">
+                            <span class="logo-text-main font-serif font-bold text-xl md:text-2xl block leading-none transition-colors duration-300">Jasna Góra</span>
+                            <span class="text-xs text-polish-red font-medium tracking-widest uppercase block mt-1 font-bold bg-white/80 px-1 rounded">Towarzystwo Kultury Polskiej</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hidden lg:flex items-center space-x-6 z-20">
+                    <a href="#about" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">О нас</a>
+                    <a href="#activities" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">Деятельность</a>
+                    <a href="#ai-assistant" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide flex items-center gap-1"><i class="fas fa-robot text-xs"></i> AI</a>
+                    <a href="#gallery" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">Галерея</a>
+                    <a href="#news" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">Новости</a>
+                    <a href="#contact" class="bg-polish-red text-white text-sm font-bold px-5 py-2 rounded-full hover:bg-red-700 transition shadow-lg transform hover:-translate-y-0.5 border border-white/20">Контакты</a>
+                </div>
+
+                <div class="lg:hidden flex items-center z-20">
+                    <button id="mobile-menu-btn" class="text-white bg-polish-red p-2 rounded hover:bg-red-700 transition focus:outline-none shadow-lg">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t absolute w-full left-0 z-30 shadow-lg text-gray-800">
+             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">О нас</a>
+                <a href="#activities" class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">Деятельность</a>
+                <a href="#ai-assistant" class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">AI</a>
+                <a href="#contact" class="block px-3 py-2 text-polish-red font-bold">Контакты</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-bg min-h-[75vh] flex items-center justify-center text-center px-4 relative pt-20">
+        <div class="max-w-4xl mx-auto text-white z-10">
+            <h2 class="text-xl md:text-2xl font-bold mb-4 uppercase tracking-[0.2em] text-gray-200 drop-shadow-md">Tyraspol</h2>
+            <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight drop-shadow-lg">
+                Towarzystwo Kultury Polskiej <br>
+                <span class="text-polish-red bg-white/10 px-4 rounded-lg backdrop-blur-sm mt-2 inline-block">"Jasna Góra"</span>
+            </h1>
+            <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-gray-100 font-medium drop-shadow-md leading-relaxed">
+                Сохраняем традиции, изучаем язык и объединяем поляков Приднестровья.
+                <br><span class="italic font-serif text-2xl mt-2 block">Witamy serdecznie!</span>
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#activities" class="bg-polish-red text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-red-700 transition shadow-xl hover:scale-105 transform duration-200 border-2 border-polish-red">Учить польский</a>
+                <a href="#about" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-gray-900 transition shadow-xl hover:scale-105 transform duration-200">Узнать больше</a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+            <svg class="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" class="fill-gray-50"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- О нас -->
+    <section id="about" class="py-20 bg-polish-pattern">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4">О нашем обществе</h2>
+                <div class="w-24 h-1 bg-polish-red mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1558236140-5e589880f08a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Польская культура" class="relative z-10 rounded-lg shadow-xl w-full object-cover h-96">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">История и Миссия</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Общество польской культуры "Jasna Góra" в Тирасполе было основано с целью объединения людей польского происхождения и всех, кто интересуется богатой культурой, историей и традициями Польши.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-700"><i class="fas fa-check text-polish-red mr-3"></i> Поддержка польской диаспоры</li>
+                        <li class="flex items-center text-gray-700"><i class="fas fa-check text-polish-red mr-3"></i> Изучение польского языка</li>
+                        <li class="flex items-center text-gray-700"><i class="fas fa-check text-polish-red mr-3"></i> Национальные праздники</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Деятельность -->
+    <section id="activities" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4">Наша деятельность</h2>
+                <div class="polish-divider max-w-xs mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-xl p-8 hover:shadow-2xl transition duration-300 border-b-4 border-polish-red group">
+                    <div class="w-16 h-16 bg-red-100 text-polish-red rounded-full flex items-center justify-center text-2xl mb-6"><i class="fas fa-book-open"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-900">Курсы польского языка</h3>
+                    <p class="text-gray-600 text-sm mb-4">Бесплатные занятия для начинающих и продолжающих.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-8 hover:shadow-2xl transition duration-300 border-b-4 border-polish-red group">
+                    <div class="w-16 h-16 bg-red-100 text-polish-red rounded-full flex items-center justify-center text-2xl mb-6"><i class="fas fa-theater-masks"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-900">Культура и Традиции</h3>
+                    <p class="text-gray-600 text-sm mb-4">Празднование Рождества, Пасхи, Дня Независимости.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-8 hover:shadow-2xl transition duration-300 border-b-4 border-polish-red group">
+                    <div class="w-16 h-16 bg-red-100 text-polish-red rounded-full flex items-center justify-center text-2xl mb-6"><i class="fas fa-passport"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-900">Консульская информация</h3>
+                    <p class="text-gray-600 text-sm mb-4">Консультации по Карте Поляка и визам.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Ассистент -->
+    <section id="ai-assistant" class="py-20 bg-red-50 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-polish-red opacity-5 rounded-full z-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-12">
+                <span class="bg-white text-polish-red px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm mb-3 inline-block">Beta</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4"><span class="text-polish-red">AI</span> Ассистент</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Интеллектуальный помощник для изучения языка и культуры.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Translator -->
+                <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-polish-red">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 flex items-center"><i class="fas fa-language text-polish-red mr-3 text-2xl"></i> Репетитор</h3>
+                    <div class="space-y-4">
+                        <textarea id="tutor-input" class="w-full p-4 border border-gray-200 rounded-lg bg-gray-50" rows="3" placeholder="Как сказать 'Доброе утро'?"></textarea>
+                        <button onclick="askTutor()" class="w-full bg-polish-red text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition">Спросить у AI</button>
+                    </div>
+                    <div id="tutor-result-container" class="mt-6 hidden">
+                        <div class="bg-gray-50 rounded-lg p-5 border border-gray-100 relative">
+                            <div id="tutor-result" class="text-gray-700 text-sm leading-relaxed whitespace-pre-line break-words-overflow"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fact Generator -->
+                <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-gray-800">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 flex items-center"><i class="fas fa-landmark text-gray-800 mr-3 text-2xl"></i> Факты</h3>
+                    <div id="fact-container" class="h-48 flex items-center justify-center bg-gray-100 rounded-lg mb-6 p-6 text-center border-2 border-dashed border-gray-200 relative overflow-auto custom-scrollbar">
+                        <p id="fact-result" class="text-gray-500 italic break-words-overflow">Нажмите кнопку ниже...</p>
+                    </div>
+                    <button onclick="generateFact()" class="w-full bg-gray-800 text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-700 transition">Сгенерировать факт</button>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="bg-white rounded-xl shadow-lg border-t-4 border-red-600 overflow-hidden">
+                <div class="p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/3 flex flex-col border-r border-gray-100 pr-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900">Экзамен</h3>
+                        <div class="bg-gray-100 p-1 rounded-lg flex mb-4 text-xs font-bold">
+                            <button id="mode-general" onclick="setQuizMode('general')" class="flex-1 py-2 rounded-md shadow bg-white text-gray-900">Общие</button>
+                            <button id="mode-custom" onclick="setQuizMode('custom')" class="flex-1 py-2 rounded-md text-gray-500">Мой текст</button>
+                        </div>
+                        <div id="custom-text-area" class="hidden mb-4"><textarea id="quiz-context" rows="4" class="w-full p-2 text-sm border bg-gray-50" placeholder="Вставьте текст..."></textarea></div>
+                        <button onclick="generateQuiz()" id="quiz-btn" class="w-full bg-red-600 text-white px-4 py-3 rounded-lg font-bold hover:bg-red-700">Начать тест</button>
+                    </div>
+                    <div class="md:w-2/3 flex flex-col justify-center min-h-[200px]">
+                        <div id="quiz-placeholder" class="text-center text-gray-400 py-4"><p>Нажмите "Начать тест"</p></div>
+                        <div id="quiz-loading" class="hidden text-center text-red-600 py-4"><i class="fas fa-circle-notch fa-spin"></i><p>Генерирую...</p></div>
+                        <div id="quiz-content" class="hidden w-full">
+                            <div class="bg-red-50 rounded-lg p-4 mb-4"><p id="quiz-question" class="text-base font-bold text-gray-900"></p></div>
+                            <div id="quiz-options" class="space-y-2 mb-4"></div>
+                            <div id="quiz-answer-section" class="hidden border-t pt-3">
+                                <button onclick="toggleAnswer()" class="text-xs font-bold text-gray-500">Показать ответ</button>
+                                <div id="quiz-answer-text" class="hidden bg-gray-800 text-white p-3 rounded-lg text-xs mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Галерея (Динамическая) -->
+    <section id="gallery" class="py-20 bg-gray-900 text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20 pointer-events-none">
+            <div class="absolute top-10 left-10 w-96 h-96 bg-polish-red rounded-full blur-[100px]"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-blue-900 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-800 pb-6">
+                <div>
+                    <h2 class="font-serif text-3xl md:text-4xl font-bold mb-2">Фотогалерея</h2>
+                    <div class="w-24 h-1 bg-polish-red"></div>
+                </div>
+                <p class="text-gray-400 text-sm mt-4 md:mt-0 max-w-md text-right">
+                    Избранные моменты из жизни общества.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] mb-12" id="gallery-grid">
+                {% for photo in gallery_images %}
+                <div class="col-span-1 row-span-1 overflow-hidden rounded-lg relative group cursor-pointer border border-gray-800 hover:border-polish-red transition duration-300"
+                     onclick="openLightbox({{ forloop.counter0 }})">
+
+                    <img src="{{ photo.image.url }}"
+                         alt="{{ photo.title }}"
+                         data-title="{{ photo.title }}"
+                         class="gallery-item w-full h-full object-cover transition duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-90 transition"></div>
+
+                    <div class="absolute bottom-0 left-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition duration-300">
+                        <i class="fas fa-search-plus text-polish-red text-xl mb-1 opacity-0 group-hover:opacity-100 transition delay-100"></i>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-4 text-center text-gray-500 py-10 bg-gray-800/50 rounded-lg border border-gray-700 border-dashed">
+                    Фотографии пока не загружены.
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center">
+                <a href="https://www.facebook.com/groups/462158971223229/media?locale=ru_RU" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition transform hover:-translate-y-1 shadow-lg border border-blue-500">
+                    <i class="fab fa-facebook-square text-2xl"></i>
+                    <span>Смотреть все альбомы на Facebook</span>
+                    <i class="fas fa-external-link-alt text-sm opacity-70"></i>
+                </a>
+                <p class="text-gray-500 text-xs mt-4">Больше фото, видео и отчетов о мероприятиях на нашей официальной странице</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Новости (Динамические) -->
+    <section id="news" class="py-20 bg-polish-pattern">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="font-serif text-3xl font-bold text-center mb-10">Ближайшие мероприятия</h2>
+
+            <div class="space-y-6">
+                {% for event in events %}
+                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition flex flex-col md:flex-row gap-6 items-center">
+                    <div class="flex-shrink-0 text-center md:text-left">
+                        <div class="bg-polish-red text-white w-16 h-16 rounded-lg flex flex-col items-center justify-center font-bold leading-tight mx-auto md:mx-0">
+                            <span class="text-2xl">{{ event.date|date:"d" }}</span>
+                            <span class="text-xs uppercase">{{ event.date|date:"M" }}</span>
+                        </div>
+                    </div>
+                    <div class="flex-grow text-center md:text-left">
+                        <h3 class="text-lg font-bold text-gray-900">{{ event.title }}</h3>
+                        <p class="text-gray-600 mt-1">{{ event.description|truncatewords:20 }}</p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="#contact" class="inline-block border border-gray-300 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition">Подробнее</a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center text-gray-500 py-10">
+                    Новых мероприятий пока нет. Следите за обновлениями!
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact" class="py-20 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+                <div>
+                    <h2 class="font-serif text-3xl font-bold mb-6">Свяжитесь с нами</h2>
+                    <p class="text-gray-600 mb-8">
+                        Мы всегда рады новым участникам и гостям. Напишите нам в мессенджеры или приходите в гости!
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-12 h-12 bg-red-50 text-polish-red rounded-full flex items-center justify-center text-xl shadow-sm">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-bold text-gray-900 text-lg">Наш адрес</h4>
+                                <a href="https://www.google.com/maps/search/?api=1&query=46.843117584034054,29.612520209576658" target="_blank">Улица 9 Января, дом 63, Тирасполь</a>
+                            </div>
+                        </div>
+
+                        <a href="https://wa.me/37377714333" target="_blank" class="flex items-start group hover:bg-green-50 p-2 -ml-2 rounded-lg transition duration-300 cursor-pointer">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="ml-4 flex flex-col justify-center h-12">
+                                <h4 class="font-bold text-gray-900 text-lg group-hover:text-green-700 transition">Написать в WhatsApp</h4>
+                                <p class="text-gray-500 text-sm">Нажмите, чтобы открыть чат</p>
+                            </div>
+                        </a>
+
+                        <div class="pt-6">
+                            <h4 class="font-bold text-gray-900 mb-4">Мы в социальных сетях</h4>
+                            <div class="flex gap-4">
+                                <a href="https://www.facebook.com/groups/462158971223229/" target="_blank" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl hover:bg-blue-700 hover:-translate-y-1 transition shadow-lg">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://www.instagram.com/jasnagora_moldawia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 text-white rounded-full flex items-center justify-center text-xl hover:opacity-90 hover:-translate-y-1 transition shadow-lg">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="mailto:jasnagura@example.com" class="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center text-xl hover:bg-gray-700 hover:-translate-y-1 transition shadow-lg">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-8 rounded-2xl shadow-lg border border-gray-100 relative overflow-hidden">
+                    <div id="form-loading" class="absolute inset-0 bg-white/80 z-10 hidden flex items-center justify-center">
+                        <div class="text-polish-red text-2xl"><i class="fas fa-circle-notch fa-spin"></i></div>
+                    </div>
+
+                    <div id="form-success" class="absolute inset-0 bg-white z-20 hidden flex flex-col items-center justify-center text-center p-6">
+                        <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-3xl mb-4">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Отправлено!</h3>
+                        <p class="text-gray-600 mb-6">Спасибо за сообщение. Мы свяжемся с вами в ближайшее время.</p>
+                        <button onclick="resetForm()" class="text-polish-red font-bold hover:underline">Отправить еще одно</button>
+                    </div>
+
+                    <form id="contact-form" onsubmit="submitContactForm(event)">
+                        <h3 class="text-xl font-bold mb-6 text-gray-800">Напишите нам письмо</h3>
+
+                        <div class="mb-5">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Ваше имя</label>
+                            <input type="text" id="contact-name" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" placeholder="Иван Иванов">
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Email для связи</label>
+                            <input type="email" id="contact-email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" placeholder="ivan@example.com">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Сообщение</label>
+                            <textarea id="contact-message" required rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" placeholder="Хочу узнать про карту поляка..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-polish-red text-white font-bold py-4 rounded-xl hover:bg-red-700 transform active:scale-95 transition shadow-lg flex items-center justify-center gap-2">
+                            <span>Отправить сообщение</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-gray text-white py-10 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h3 class="font-serif font-bold text-xl">Jasna Góra</h3>
+            <p class="text-gray-400 text-sm mt-1">Towarzystwo Kultury Polskiej w Tyraspolu &copy; 2024</p>
+        </div>
+    </footer>
+
+    <div id="lightbox" class="fixed inset-0 z-[60] bg-black/95 hidden flex flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeLightbox()">
+
+        <button class="absolute top-6 right-6 text-white/70 hover:text-polish-red text-5xl transition focus:outline-none z-50 leading-none">
+            &times;
+        </button>
+
+        <button onclick="event.stopPropagation(); changeImage(-1)" class="absolute left-2 md:left-8 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white hover:scale-110 transition p-4 z-50 focus:outline-none">
+            <i class="fas fa-chevron-left text-3xl md:text-5xl"></i>
+        </button>
+
+        <button onclick="event.stopPropagation(); changeImage(1)" class="absolute right-2 md:right-8 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white hover:scale-110 transition p-4 z-50 focus:outline-none">
+            <i class="fas fa-chevron-right text-3xl md:text-5xl"></i>
+        </button>
+
+        <div class="relative max-w-full max-h-full flex flex-col items-center" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="Full view" class="max-h-[80vh] max-w-full object-contain rounded-lg shadow-2xl border border-gray-800">
+            <p id="lightbox-caption" class="text-center text-gray-300 mt-4 font-serif text-lg tracking-wide bg-black/50 px-4 py-2 rounded-full"></p>
+        </div>
+
+        <div class="absolute bottom-6 text-gray-600 text-xs uppercase tracking-widest pointer-events-none">
+            Используйте стрелки или клавиатуру
+        </div>
+    </div>
+
+    <script>
+        // Скрипт для прозрачной навигации
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.remove('nav-transparent', 'py-2');
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.add('nav-transparent', 'py-2');
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        // --- Gemini API Functions ---
+        async function callGemini(prompt) {
+            const url = '/api/ask_ai/';
+            const payload = { prompt: prompt };
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+                return data.text;
+            } catch (error) {
+                console.error("AI Error:", error);
+                return "Извините, сервис временно недоступен.";
+            }
+        }
+
+        async function askTutor() {
+            const input = document.getElementById('tutor-input').value;
+            if (!input.trim()) return;
+
+            const resultContainer = document.getElementById('tutor-result-container');
+            const resultBox = document.getElementById('tutor-result');
+
+            resultContainer.classList.remove('hidden');
+            resultBox.innerHTML = '<div class="flex items-center gap-2 text-polish-red font-semibold animate-pulse-slow"><i class="fas fa-circle-notch fa-spin"></i> <span>Tłumaczę... (Перевожу...)</span></div>';
+
+            const prompt = `Ты репетитор польского. Переведи или ответь: "${input}". Отвечай на русском.`;
+            const text = await callGemini(prompt);
+
+            resultBox.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900">$1</strong>').replace(/\n/g, '<br>');
+        }
+
+        async function generateFact() {
+            const container = document.getElementById('fact-container');
+            const resultBox = document.getElementById('fact-result');
+
+            container.classList.add('items-center', 'justify-center');
+            resultBox.classList.add('text-center');
+            resultBox.classList.remove('text-left');
+            resultBox.innerHTML = '<div class="flex flex-col items-center justify-center h-full gap-2 text-gray-800 animate-pulse-slow"><i class="fas fa-compass fa-spin text-2xl"></i> <span>Ищу факт...</span></div>';
+
+            const topics = ["истории", "кухне", "географии", "людях", "праздниках"];
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+            const prompt = `Расскажи короткий факт о Польше про "${randomTopic}". Начни с "А вы знали, что..."`;
+
+            const text = await callGemini(prompt);
+
+            container.classList.remove('items-center', 'justify-center');
+            resultBox.classList.remove('text-center');
+            resultBox.classList.add('text-left');
+            resultBox.innerHTML = `<span class="text-gray-800 font-medium leading-relaxed block text-left">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')}</span>`;
+        }
+
+        // --- Quiz Logic ---
+        let currentQuizAnswer = "";
+        let quizMode = "general";
+
+        function setQuizMode(mode) {
+            quizMode = mode;
+            const generalBtn = document.getElementById('mode-general');
+            const customBtn = document.getElementById('mode-custom');
+            const customArea = document.getElementById('custom-text-area');
+
+            if (mode === 'custom') {
+                customBtn.classList.replace('text-gray-500', 'text-gray-900');
+                customBtn.classList.add('bg-white', 'shadow');
+                generalBtn.classList.remove('bg-white', 'shadow');
+                generalBtn.classList.add('text-gray-500');
+                customArea.classList.remove('hidden');
+            } else {
+                generalBtn.classList.replace('text-gray-500', 'text-gray-900');
+                generalBtn.classList.add('bg-white', 'shadow');
+                customBtn.classList.remove('bg-white', 'shadow');
+                customBtn.classList.add('text-gray-500');
+                customArea.classList.add('hidden');
+            }
+        }
+
+        async function generateQuiz() {
+            const btn = document.getElementById('quiz-btn');
+            const placeholder = document.getElementById('quiz-placeholder');
+            const loading = document.getElementById('quiz-loading');
+            const content = document.getElementById('quiz-content');
+
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.disabled = true;
+            placeholder.classList.add('hidden');
+            content.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            let prompt = "";
+            if (quizMode === 'custom') {
+                const customText = document.getElementById('quiz-context').value;
+                if (!customText.trim()) {
+                    alert('Введите текст!');
+                    loading.classList.add('hidden');
+                    placeholder.classList.remove('hidden');
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btn.disabled = false;
+                    return;
+                }
+                prompt = `По тексту: "${customText}" составь 1 вопрос с вариантами.`;
+            } else {
+                prompt = `Подготовь 1 вопрос для экзамена на Карту Поляка.`;
+            }
+
+            prompt += ` Формат: ВОПРОС ### ОТВЕТ_1 ### ОТВЕТ_2 ### ОТВЕТ_3 ### Правильный ответ.`;
+
+            try {
+                const text = await callGemini(prompt);
+                const parts = text.split('###').map(p => p.trim());
+
+                if (parts.length >= 5) {
+                    document.getElementById('quiz-question').innerText = parts[0];
+                    const optionsContainer = document.getElementById('quiz-options');
+                    optionsContainer.innerHTML = '';
+                    const letters = ['A', 'B', 'C'];
+                    for(let i=0; i<3; i++) {
+                        optionsContainer.innerHTML += `
+                            <div onclick="selectOption(this)" class="quiz-option cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition flex gap-3 items-center group">
+                                <span class="w-6 h-6 flex-shrink-0 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-xs group-hover:bg-red-200 group-hover:text-red-700 transition">${letters[i]}</span>
+                                <span class="text-gray-700 text-sm font-medium leading-snug break-words-overflow">${parts[i+1]}</span>
+                            </div>`;
+                    }
+                    currentQuizAnswer = parts[4];
+                    document.getElementById('quiz-answer-text').innerHTML = currentQuizAnswer;
+                    document.getElementById('quiz-answer-text').classList.add('hidden');
+                    document.getElementById('quiz-answer-section').classList.remove('hidden');
+                    loading.classList.add('hidden');
+                    content.classList.remove('hidden');
+                }
+            } catch (e) {
+                loading.innerHTML = "<p>Ошибка.</p>";
+            } finally {
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.disabled = false;
+                btn.querySelector('span').innerText = "Следующий вопрос";
+            }
+        }
+
+        function selectOption(element) {
+            document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('bg-red-100', 'border-red-500', 'ring-1', 'ring-red-500'));
+            element.classList.add('bg-red-100', 'border-red-500', 'ring-1', 'ring-red-500');
+        }
+
+        function toggleAnswer() {
+            const answerBox = document.getElementById('quiz-answer-text');
+            const btn = document.querySelector('#quiz-answer-section button');
+            if (answerBox.classList.contains('hidden')) {
+                answerBox.classList.remove('hidden');
+                btn.innerHTML = '<i class="fas fa-eye-slash"></i> Скрыть ответ';
+            } else {
+                answerBox.classList.add('hidden');
+                btn.innerHTML = '<i class="fas fa-eye"></i> Показать правильный ответ';
+            }
+        }
+
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => menu.classList.toggle('hidden'));
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                menu.classList.add('hidden');
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // --- Контактная форма ---
+        async function submitContactForm(event) {
+            event.preventDefault(); // Не перезагружать страницу
+
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            const loading = document.getElementById('form-loading');
+            const success = document.getElementById('form-success');
+
+            // Показываем загрузку
+            loading.classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/contact/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message })
+                });
+
+                if (response.ok) {
+                    // Успех
+                    loading.classList.add('hidden');
+                    success.classList.remove('hidden');
+                } else {
+                    alert('Ошибка отправки. Попробуйте позже.');
+                    loading.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Ошибка соединения.');
+                loading.classList.add('hidden');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('contact-form').reset();
+            document.getElementById('form-success').classList.add('hidden');
+        }
+
+        // --- Lightbox Functions (С поддержкой листания) ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        // Переменные для хранения списка фото
+        let galleryImages = []; // Сюда соберем все ссылки и подписи
+        let currentImageIndex = 0; // Какое фото открыто сейчас
+
+        // 1. При загрузке страницы собираем все данные о картинках в массив
+        window.addEventListener('load', () => {
+            const elements = document.querySelectorAll('.gallery-item');
+            elements.forEach((el) => {
+                galleryImages.push({
+                    src: el.src,
+                    title: el.getAttribute('data-title') || ''
+                });
+            });
+        });
+
+        // 2. Функция открытия по индексу (0, 1, 2...)
+        function openLightbox(index) {
+            currentImageIndex = index; // Запоминаем, какое открыли
+            updateLightboxContent();   // Обновляем картинку
+
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            setTimeout(() => lightbox.classList.remove('opacity-0'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 3. Функция переключения (назад -1, вперед +1)
+        function changeImage(direction) {
+            currentImageIndex += direction;
+
+            // Если дошли до конца -> переходим в начало
+            if (currentImageIndex >= galleryImages.length) {
+                currentImageIndex = 0;
+            }
+            // Если дошли до начала -> переходим в конец
+            if (currentImageIndex < 0) {
+                currentImageIndex = galleryImages.length - 1;
+            }
+
+            updateLightboxContent();
+        }
+
+        // 4. Вспомогательная функция обновления картинки
+        function updateLightboxContent() {
+            const photo = galleryImages[currentImageIndex];
+            // Добавляем эффект плавного исчезновения/появления при смене
+            lightboxImg.style.opacity = '0.5';
+
+            setTimeout(() => {
+                lightboxImg.src = photo.src;
+                lightboxCaption.innerText = photo.title;
+                lightboxImg.style.opacity = '1';
+            }, 150);
+        }
+
+        function closeLightbox() {
+            lightbox.classList.add('opacity-0');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                lightbox.classList.remove('flex');
+                lightboxImg.src = '';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        }
+
+        // Управление клавиатурой (Esc, Влево, Вправо)
+        document.addEventListener('keydown', function(event) {
+            if (lightbox.classList.contains('hidden')) return; // Если закрыто - не реагируем
+
+            if (event.key === "Escape") closeLightbox();
+            if (event.key === "ArrowLeft") changeImage(-1);  // Стрелка влево
+            if (event.key === "ArrowRight") changeImage(1);  // Стрелка вправо
+        });
+    </script>
+</body>
+</html>
