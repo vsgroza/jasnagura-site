@@ -1,4 +1,5 @@
 import json
+import os
 import google.generativeai as genai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -22,9 +23,15 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 # --- НАСТРОЙКА AI ---
-# Вставь сюда свой ключ (в кавычках)
-API_KEY = "AIzaSyB9FCZB3Mv0yUMe0hNhLaGmTTihX1OGPCg"
-genai.configure(api_key=API_KEY)
+# Получаем ключ из настроек сервера (Render)
+api_key = os.environ.get("GEMINI_API_KEY")
+
+# Если на сервере ключа нет, используем запасной (ваш локальный)
+if not api_key:
+    api_key = "AIzaSyB9FCZB3Mv0yUMe0hNhLaGmTTihX1OGPCg"
+
+# Настраиваем AI
+genai.configure(api_key=api_key)
 
 @csrf_exempt # Отключаем строгую проверку безопасности для упрощения (только для этой функции)
 def ai_proxy(request):
