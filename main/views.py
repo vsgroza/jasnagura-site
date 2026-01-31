@@ -20,7 +20,7 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
-# --- AI ФУНКЦИЯ ---
+# --- AI ФУНКЦИЯ (БЕЗОПАСНАЯ) ---
 @csrf_exempt
 def ask_ai(request):
     if request.method == 'POST':
@@ -28,20 +28,22 @@ def ask_ai(request):
             data = json.loads(request.body)
             user_prompt = data.get('prompt', '')
 
-            # === КЛЮЧ ===
-            # Вставь свой ключ AIza... (если он там уже есть - не трогай)
-            api_key = os.environ.get("GEMINI_API_KEY", "AIzaSyAwz02DmeSWnUfPrftMb882AtWQ6tkjGhk")
+            # === БЕЗОПАСНОЕ ПОЛУЧЕНИЕ КЛЮЧА ===
+            # Мы больше НЕ пишем ключ в кавычках здесь!
+            # Python возьмет его из настроек Render или PyCharm.
+            api_key = os.environ.get("GEMINI_API_KEY")
+
+            if not api_key:
+                return JsonResponse({'error': 'API Key not found. Check environment variables.'}, status=500)
 
             genai.configure(api_key=api_key)
 
-            # === ВАЖНОЕ ИЗМЕНЕНИЕ ===
-            # Используем актуальную модель из твоего списка 2026 года
+            # Используем актуальную модель
             model = genai.GenerativeModel('gemini-2.5-flash')
 
-            # Спрашиваем у AI
             response = model.generate_content(user_prompt)
-
             return JsonResponse({'text': response.text})
+
         except Exception as e:
             print(f"Error: {e}")
             return JsonResponse({'error': str(e)}, status=500)
