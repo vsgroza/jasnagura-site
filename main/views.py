@@ -29,13 +29,14 @@ def ask_ai(request):
             user_prompt = data.get('prompt', '')
 
             # === КЛЮЧ ===
-            # Вставь свой ключ AIza... в кавычки ниже
-            api_key = os.environ.get("GEMINI_API_KEY", "ВСТАВЬ_ТУТ_СВОЙ_НОВЫЙ_КЛЮЧ_AIza...")
+            # Вставь свой ключ AIza... (если он там уже есть - не трогай)
+            api_key = os.environ.get("GEMINI_API_KEY", "ТВОЙ_КЛЮЧ_AIza...")
 
             genai.configure(api_key=api_key)
 
-            # ИСПРАВЛЕНИЕ: Меняем модель на самую стабильную 'gemini-pro'
-            model = genai.GenerativeModel('gemini-pro')
+            # === ВАЖНОЕ ИЗМЕНЕНИЕ ===
+            # Используем актуальную модель из твоего списка 2026 года
+            model = genai.GenerativeModel('gemini-2.5-flash')
 
             # Спрашиваем у AI
             response = model.generate_content(user_prompt)
