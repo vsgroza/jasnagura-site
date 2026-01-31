@@ -4,63 +4,55 @@ import google.generativeai as genai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from .models import Event, GalleryImage, SiteSettings, ContactMessage  # Импортируем наши модели
+from .models import Event, GalleryImage, SiteSettings, ContactMessage
 
 
 def index(request):
     events = Event.objects.all()
     gallery_images = GalleryImage.objects.all()
-
-    # Берем ПОСЛЕДНЮЮ загруженную настройку
     settings = SiteSettings.objects.last()
 
     context = {
         'events': events,
         'gallery_images': gallery_images,
-        'settings': settings,  # <--- Передаем настройки в шаблон
+        'settings': settings,
     }
-
     return render(request, 'main/index.html', context)
 
-# --- НАСТРОЙКА AI ---
-# Получаем ключ из настроек сервера (Render)
-api_key = os.environ.get("GEMINI_API_KEY")
 
-# Если на сервере ключа нет, используем запасной (ваш локальный)
-if not api_key:
-    api_key = "AIzaSyB9FCZB3Mv0yUMe0hNhLaGmTTihX1OGPCg"
-
-# Настраиваем AI
-genai.configure(api_key=api_key)
-
-@csrf_exempt # Отключаем строгую проверку безопасности для упрощения (только для этой функции)
-def ai_proxy(request):
+# --- AI ФУНКЦИЯ ---
+@csrf_exempt
+def ask_ai(request):
     if request.method == 'POST':
         try:
-            # Получаем данные из запроса (то, что прислал JavaScript)
             data = json.loads(request.body)
             user_prompt = data.get('prompt', '')
 
-            # Выбираем модель
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            # === КЛЮЧ ===
+            # Вставь свой ключ AIza... в кавычки ниже
+            api_key = os.environ.get("GEMINI_API_KEY", "ВСТАВЬ_ТУТ_СВОЙ_НОВЫЙ_КЛЮЧ_AIza...")
+
+            genai.configure(api_key=api_key)
+
+            # ИСПРАВЛЕНИЕ: Меняем модель на самую стабильную 'gemini-pro'
+            model = genai.GenerativeModel('gemini-pro')
 
             # Спрашиваем у AI
             response = model.generate_content(user_prompt)
 
-            # Возвращаем ответ обратно на сайт
             return JsonResponse({'text': response.text})
-
         except Exception as e:
+            print(f"Error: {e}")
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+# --- СООБЩЕНИЯ ---
 @csrf_exempt
 def save_contact_message(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            # Создаем запись в базе
             ContactMessage.objects.create(
                 name=data.get('name'),
                 email=data.get('email'),
