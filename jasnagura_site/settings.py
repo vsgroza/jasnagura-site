@@ -105,10 +105,16 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+# --- Static files (CSS, JavaScript, Images) ---
 STATIC_URL = 'static/'
-# Настройки для загрузки медиа-файлов (картинок)
+
+# ЭТОЙ СТРОКИ НЕ ХВАТАЛО:
+# Она говорит Django: "Сложи все файлы в папку staticfiles"
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Настройки Whitenoise (для правильной работы на сервере)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# --- Media files (User uploaded) ---
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
