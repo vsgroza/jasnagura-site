@@ -4,18 +4,20 @@ import google.generativeai as genai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from .models import Event, GalleryImage, SiteSettings, ContactMessage
+from .models import Event, GalleryImage, SiteSettings, ContactMessage, OnlineTest
 
 
 def index(request):
     events = Event.objects.all()
     gallery_images = GalleryImage.objects.all()
     settings = SiteSettings.objects.last()
+    online_tests = OnlineTest.objects.filter(is_active=True)
 
     context = {
         'events': events,
         'gallery_images': gallery_images,
         'settings': settings,
+        'online_tests': online_tests,
     }
     return render(request, 'main/index.html', context)
 

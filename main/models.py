@@ -77,3 +77,17 @@ class ContactMessage(models.Model):
         ordering = ['-created_at'] # Свежие сверху
 
 
+# 5. Онлайн Тесты (Интеграция с Online Test Pad)
+class OnlineTest(models.Model):
+    title = models.CharField("Название теста", max_length=200)
+    # Сюда будем вставлять код, который дает Online Test Pad
+    embed_code = models.TextField("Код вставки (Widget)", help_text="Вставьте сюда код Iframe или Script из Online Test Pad")
+    is_active = models.BooleanField("Показывать на сайте", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Онлайн тест"
+        verbose_name_plural = "Онлайн тесты"

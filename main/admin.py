@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import mark_safe  # Позволяет выводить HTML (картинки) в админке
-from .models import Event, GalleryImage, SiteSettings, ContactMessage
+from .models import Event, GalleryImage, SiteSettings, ContactMessage, OnlineTest
 
 
 # 1. Настройка для Мероприятий (Новости)
@@ -47,3 +47,8 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created_at')
     readonly_fields = ('name', 'email', 'message', 'created_at')
     ordering = ('-created_at',)
+
+@admin.register(OnlineTest)
+class OnlineTestAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_active', 'created_at')
+
