@@ -3,7 +3,7 @@ import os
 import google.generativeai as genai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Event, GalleryImage, SiteSettings, ContactMessage, OnlineTest
 
 
@@ -51,6 +51,17 @@ def ask_ai(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# НОВАЯ ФУНКЦИЯ: Страница конкретного теста
+def test_detail(request, test_id):
+    # Ищем тест по ID, если нет - ошибка 404
+    test = get_object_or_404(OnlineTest, id=test_id)
+
+    context = {
+        'test': test
+    }
+    return render(request, 'main/test_detail.html', context)
 
 # --- СООБЩЕНИЯ ---
 @csrf_exempt

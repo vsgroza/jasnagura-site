@@ -364,31 +364,32 @@
 
         <!-- Quiz Section -->
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-red-100 text-polish-red rounded-full flex items-center justify-center text-xl">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800">Проверь свои знания</h3>
-            </div>
-
-            {% if online_tests %}
-                <div class="space-y-6">
-                    {% for test in online_tests %}
-                        <div class="border-t pt-4 first:border-0 first:pt-0">
-                            <h4 class="font-bold text-lg mb-3">{{ test.title }}</h4>
-                            <div id="test-container-{{ forloop.counter }}"
-                                 class="w-full overflow-hidden rounded-lg border border-gray-200 min-h-[500px]">
-                                {{ test.embed_code|safe }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-gray-500 italic">
-                    Тесты сейчас обновляются. Загляните позже!
-                </p>
-            {% endif %}
+    <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 bg-red-100 text-polish-red rounded-full flex items-center justify-center text-xl">
+            <i class="fas fa-graduation-cap"></i>
         </div>
+        <h3 class="text-xl font-bold text-gray-800">Проверь свои знания</h3>
+    </div>
+
+    {% if online_tests %}
+        <div class="space-y-4">
+            {% for test in online_tests %}
+                <div class="border rounded-lg p-5 hover:shadow-md transition bg-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h4 class="font-bold text-lg text-gray-900">{{ test.title }}</h4>
+                        <p class="text-sm text-gray-500">Пройти онлайн-тестирование</p>
+                    </div>
+
+                    <a href="{% url 'test_detail' test.id %}" target="_blank" class="px-6 py-2 bg-polish-red text-white rounded-full font-medium hover:bg-red-700 transition shadow-md whitespace-nowrap">
+                        Начать тест <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-500 italic">Тесты сейчас обновляются.</p>
+    {% endif %}
+</div>
     </div>
 </section>
 
