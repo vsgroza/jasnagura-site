@@ -470,7 +470,8 @@
                         {{ event.description|truncatewords:30 }}
                     </p>
 
-                    <a href="{% url 'event_detail' event.id %}" class="inline-block px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                    <a href="{% url 'event_detail' event.id %}"
+                       class="inline-block px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
                         Подробнее
                     </a>
                 </div>
@@ -495,16 +496,22 @@
                 </p>
 
                 <div class="space-y-6">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-12 h-12 bg-red-50 text-polish-red rounded-full flex items-center justify-center text-xl shadow-sm">
+                    <a href="https://maps.app.goo.gl/BBABK4H67EECzpr36"
+                       target="_blank"
+                       class="flex items-start p-3 -mx-3 rounded-xl transition duration-300 hover:bg-red-50 group cursor-pointer">
+
+                        <div class="flex-shrink-0 w-12 h-12 bg-red-100 text-polish-red rounded-full flex items-center justify-center text-xl shadow-sm transition group-hover:bg-polish-red group-hover:text-white">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
+
                         <div class="ml-4">
-                            <h4 class="font-bold text-gray-900 text-lg">Наш адрес</h4>
-                            <a href="https://www.google.com/maps/search/?api=1&query=46.843117584034054,29.612520209576658"
-                               target="_blank">Улица 9 Января, дом 63, Тирасполь</a>
+                            <h4 class="font-bold text-gray-900 text-lg group-hover:text-polish-red transition">Наш
+                                адрес</h4>
+                            <p class="text-gray-600 group-hover:text-gray-800 transition">
+                                Улица 9 Января, дом 63, Тирасполь
+                            </p>
                         </div>
-                    </div>
+                    </a>
 
                     <a href="https://wa.me/37377714333" target="_blank"
                        class="flex items-start group hover:bg-green-50 p-2 -ml-2 rounded-lg transition duration-300 cursor-pointer">
@@ -529,10 +536,6 @@
                                target="_blank"
                                class="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 text-white rounded-full flex items-center justify-center text-xl hover:opacity-90 hover:-translate-y-1 transition shadow-lg">
                                 <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="mailto:jasnagura@example.com"
-                               class="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center text-xl hover:bg-gray-700 hover:-translate-y-1 transition shadow-lg">
-                                <i class="fas fa-envelope"></i>
                             </a>
                         </div>
                     </div>
