@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/ask_ai/', views.ask_ai, name='ask_ai'),
     path('api/contact/', views.save_contact_message, name='save_contact'),
     path('test/<int:test_id>/', views.test_detail, name='test_detail'),
+    path('event/<int:event_id>/', views.event_detail, name='event_detail'),
 ]
 
 # Для картинок

@@ -7,6 +7,10 @@ class Event(models.Model):
     title = models.CharField("Название", max_length=200)
     description = models.TextField("Описание")
     date = models.DateField("Дата проведения")
+
+    # НОВОЕ ПОЛЕ:
+    image = models.ImageField("Фото (внутри новости)", upload_to='events/', blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -15,7 +19,7 @@ class Event(models.Model):
     class Meta:
         verbose_name = "Мероприятие"
         verbose_name_plural = "Мероприятия"
-        ordering = ['-date'] # Сортировка: сначала новые
+        ordering = ['-date']
 
 # Модель для Галереи
 class GalleryImage(models.Model):

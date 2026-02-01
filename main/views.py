@@ -21,6 +21,11 @@ def index(request):
     }
     return render(request, 'main/index.html', context)
 
+#функция открытия страницы
+def event_detail(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'main/event_detail.html', {'event': event})
+
 
 # --- AI ФУНКЦИЯ (БЕЗОПАСНАЯ) ---
 @csrf_exempt
