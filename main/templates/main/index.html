@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ru">
@@ -182,17 +183,49 @@
             </div>
 
             <div class="hidden lg:flex items-center space-x-6 z-20">
-                <a href="#about" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">О
-                    нас</a>
+                <a href="#about" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">
+                    {% trans "О нас" %}
+                </a>
+
                 <a href="#activities"
-                   class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">Деятельность</a>
+                   class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">
+                    {% trans "Деятельность" %}
+                </a>
+
                 <a href="#ai-assistant"
-                   class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide flex items-center gap-1"><i
-                        class="fas fa-robot text-xs"></i> AI</a>
-                <a href="#gallery" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">Галерея</a>
-                <a href="#news" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">Новости</a>
+                   class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide flex items-center gap-1">
+                    <i class="fas fa-robot text-xs"></i> {% trans "AI" %}
+                </a>
+
+                <a href="#gallery" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">
+                    {% trans "Галерея" %}
+                </a>
+
+                <a href="#news" class="nav-link text-sm font-bold transition duration-300 uppercase tracking-wide">
+                    {% trans "Новости" %}
+                </a>
+
                 <a href="#contact"
-                   class="bg-polish-red text-white text-sm font-bold px-5 py-2 rounded-full hover:bg-red-700 transition shadow-lg transform hover:-translate-y-0.5 border border-white/20">Контакты</a>
+                   class="bg-polish-red text-white text-sm font-bold px-5 py-2 rounded-full hover:bg-red-700 transition shadow-lg transform hover:-translate-y-0.5 border border-white/20">
+                    {% trans "Контакты" %}
+                </a>
+
+                <div class="flex items-center space-x-2 ml-4 border-l border-gray-300 pl-4">
+                    <form action="{% url 'set_language' %}" method="post" class="flex gap-2">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+
+                        <button type="submit" name="language" value="ru"
+                                class="{% if LANGUAGE_CODE == 'ru' %}font-bold text-polish-red{% else %}text-gray-400 hover:text-gray-600{% endif %} transition text-sm">
+                            RU
+                        </button>
+                        <span class="text-gray-300">|</span>
+                        <button type="submit" name="language" value="pl"
+                                class="{% if LANGUAGE_CODE == 'pl' %}font-bold text-polish-red{% else %}text-gray-400 hover:text-gray-600{% endif %} transition text-sm">
+                            PL
+                        </button>
+                    </form>
+                </div>
             </div>
 
             <div class="lg:hidden flex items-center z-20">
@@ -206,10 +239,13 @@
     <div id="mobile-menu"
          class="hidden lg:hidden bg-white border-t absolute w-full left-0 z-30 shadow-lg text-gray-800">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="#about" class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">О нас</a>
-            <a href="#activities" class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">Деятельность</a>
-            <a href="#ai-assistant" class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">AI</a>
-            <a href="#contact" class="block px-3 py-2 text-polish-red font-bold">Контакты</a>
+            <a href="#about"
+               class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">{% trans "О нас" %}</a>
+            <a href="#activities"
+               class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">{% trans "Деятельность" %}</a>
+            <a href="#ai-assistant"
+               class="block px-3 py-2 text-gray-800 hover:text-polish-red font-bold">{% trans "AI" %}</a>
+            <a href="#contact" class="block px-3 py-2 text-polish-red font-bold">{% trans "Контакты" %}</a>
         </div>
     </div>
 </nav>

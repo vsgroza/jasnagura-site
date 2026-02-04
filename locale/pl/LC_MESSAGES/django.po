@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-04 09:30+0000\n"
+"PO-Revision-Date: 2026-02-04 09:05+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: jasnagura_site/settings.py:100
+msgid "Russian"
+msgstr ""
+
+#: jasnagura_site/settings.py:101
+msgid "Polish"
+msgstr ""
+
+#: main/templates/main/index.html:187 main/templates/main/index.html:243
+msgid "О нас"
+msgstr "O nas"
+
+#: main/templates/main/index.html:192 main/templates/main/index.html:245
+msgid "Деятельность"
+msgstr "Działalność"
+
+#: main/templates/main/index.html:197 main/templates/main/index.html:247
+msgid "AI"
+msgstr "AI"
+
+#: main/templates/main/index.html:201
+msgid "Галерея"
+msgstr "Galeria"
+
+#: main/templates/main/index.html:205
+msgid "Новости"
+msgstr "Aktualności"
+
+#: main/templates/main/index.html:210 main/templates/main/index.html:248
+msgid "Контакты"
+msgstr "Kontakt"
+
+#~ msgid "Русский"
+#~ msgstr "Rosyjski"
+
+#~ msgid "Польский"
+#~ msgstr "Polski"

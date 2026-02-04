@@ -1,10 +1,10 @@
 import dj_database_url
 import os
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -16,7 +16,6 @@ SECRET_KEY = 'django-insecure-53kjddxjxcp7ks(ckgq_2^4!33s-*u+&+=j84(-gq-r1l#oimk
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -34,6 +33,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",  # <--- ДОБАВИЛИ ЭТУ ВАЖНУЮ СТРОКУ
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,7 +61,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'jasnagura_site.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
@@ -73,7 +72,6 @@ DATABASES = {
         conn_max_age=600
     )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -93,18 +91,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru'
 
+LANGUAGES = [
+    ('ru', _('Russian')),
+    ('pl', _('Polish')),
+]
+
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = True # Включить систему перевода
+USE_L10N = True
 
 USE_TZ = True
 
+# Папка, где будут лежать файлы с переводами
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 # --- Static files (CSS, JavaScript, Images) ---
 STATIC_URL = 'static/'
