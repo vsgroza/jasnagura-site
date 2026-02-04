@@ -39,8 +39,8 @@ msgid "Галерея"
 msgstr "Galeria"
 
 #: main/templates/main/index.html:205
-msgid "Новости"
-msgstr "Aktualności"
+msgid "Мероприятия"
+msgstr "Wydarzenia"
 
 #: main/templates/main/index.html:210 main/templates/main/index.html:248
 msgid "Контакты"
